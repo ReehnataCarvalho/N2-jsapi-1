@@ -1,39 +1,33 @@
-let cep = document.getElementById('cep')
+let cep = document.getElementById('cep') // para pegar o input da pag
 
-fetch('https://viacep.com.br/ws/' + cep + '/json/')
+cep.addEventListener("focusout",() =>{
+    console.log(cep.value)
+    console.log('https://viacep.com.br/ws/' + cep.value + '/json')
 
+    fetch('https://viacep.com.br/ws/' + cep.value + '/json')
+        .then(function(response){
+            return response.json();
+        })
+        .then(function(data){
+            console.log(data)
 
-.then(function(response){
+            const estado = document.getElementById('estado');
+            estado.value =  data.uf; // valor do html = valor da API 
 
-    return response.json();
+            // Document.getElementById('estado'). value = data.uf   que é basicamente a mesma coisa que esta na linha de baixo 
 
-})
-.then(function(data){
+            const cidade = document.getElementById('cidade');
+            cidade.value =  data.localidade;
 
-    console.log("sucesso")
-    console.log(data)
+            const bairro = document.getElementById('bairro');
+            bairro.value =  data.bairro;
 
+            const endereco = document.getElementById('endereco');
+            endereco.value =  data.logradouro;  
 
-    data.forEach(enderecos => {
-
-
-    const estado = document.getElementById('estado');
-    estado.innerHTML = " estado: " + enderecos.estado;
-
-    const cidade = document.getElementById('cidade');
-    cidade.innerHTML = " estado: " + enderecos.cidade;
-
-    const bairro = document.getElementById('bairro');
-    bairro.innerHTML = " estado: " + enderecos.bairro;
-
-    const endereco = document.getElementById('endereco');
-    endereco.innerHTML = " estado: " + enderecos.estado;  
-
-})
-.catch(function(erro){
-
-    console.log(erro);
-
-})
-
-})
+        })
+        .catch(function(erro){
+            console.log(erro);
+        })
+        
+    })
